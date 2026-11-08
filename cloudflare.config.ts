@@ -65,11 +65,17 @@ export default defineConfig((ctx) => {
       // so they need no binding. Once deployed this way, rolling back to a
       // `migrations`-based wrangler config is rejected.
       exports: {
-        default: exports.worker({ cache: { enabled: false } }),
-        App: exports.worker({ cache: { enabled: true } }),
-        RateLimiter: exports.durableObject({ storage: "sqlite" }),
-        PostPublisher: exports.durableObject({ storage: "sqlite" }),
-      },
+  default: exports.worker({ cache: { enabled: false } }),
+  App: exports.worker({ cache: { enabled: true } }),
+  RateLimiter: exports.durableObject({ storage: "sqlite" }),
+  PostPublisher: exports.durableObject({ storage: "sqlite" }),
+
+  // Retire the legacy PasswordHasher Durable Object.
+  PasswordHasher: {
+    type: "durable-object",
+    state: "deleted",
+  },
+},
     },
   };
 });
